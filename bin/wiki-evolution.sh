@@ -10,7 +10,7 @@ ffmpeg --help 2>&1 | head -n2
 echo
 
 # settings
-resolution=1360x720
+resolution=1900x1200
 seconds_per_day=0.04
 auto_skip_seconds=0.05
 elasticity=0.01
@@ -46,21 +46,27 @@ echo
 echo "Rendering $extension at $resolution @ $fps fps to $output..."
 echo
 
-# TODO: fetch custom backgrounds and logos
+# TODO: fetch custom backgrounds and logos #	--stop-at-end \
 
 # call gource
 xvfb-run -a -s "-screen 0 $resolution""x16" gource \
+  -t 10 \
 	--log-format custom \
-	--stop-at-end \
 	--seconds-per-day $seconds_per_day \
 	--auto-skip-seconds $auto_skip_seconds \
 	--elasticity $elasticity \
 	--highlight-users \
 	--background-colour 222222 \
 	--hide dirnames,progress,mouse \
-	--user-friction .2 \
 	--font-size 16 \
 	--title "wiki-evolution for $wikiname" \
+	--user-filter "Wikiw?W?orks*" \
+	--user-friction 0.5 \
+	--filename-time 0.5 \
+	--filename-colour 02FB73 \
+	--highlight-users \
+  --highlight-colour FB02CA \
+	--dir-colour 02FB73 \
 	-$resolution \
 	--output-ppm-stream - \
 	--output-framerate $fps \

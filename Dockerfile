@@ -2,9 +2,17 @@
 FROM node:slim
 
 RUN apt-get update && \
-	apt-get install -y gource ffmpeg xvfb
+	apt-get install -y ffmpeg xvfb vim && \
+    apt-get install -y vim autoconf automake git build-essential libsdl2-dev libsdl2-image-dev libpcre2-dev libfreetype6-dev libglew-dev libglm-dev libboost-filesystem-dev libpng-dev libtinyxml-dev
 
 WORKDIR /opt/wiki-evolution
+
+RUN git clone https://github.com/WikiTeq/Gource.git && \
+    cd Gource && \
+    ./autogen.sh && \
+    ./configure && \
+    make && \
+    make install
 
 COPY package.json .
 COPY package-lock.json .
@@ -17,4 +25,6 @@ ENV BUILD_DATE=$BUILD_DATE
 ENV GITHUB_SHA=$GITHUB_SHA
 
 COPY . .
-USER nobody
+#COPY ./gource /bin/gource
+#RUN chmod +x /bin/gource
+USER root
